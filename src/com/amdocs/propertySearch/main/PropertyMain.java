@@ -5,13 +5,16 @@ import com.amdocs.propertySearch.dao.PropertyDAO;
 import com.amdocs.propertySearch.exception.PropertyException;
 import com.amdocs.propertySearch.model.Property;
 import java.util.List;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class PropertyMain {
 	static Scanner sc=new Scanner(System.in);
 	public static void main(String[] args) throws SQLException {
-           System.out.println("Welcome to Property Search System. Please select an operation you want ot perform: \n1. Add new property");
+           System.out.println("Welcome to Property Search System. Please select an operation you want to perform: \n1. Add new property");
            System.out.println("2. Update property cost \n3. Delete Prperty \n4. Find by city \n5. View all properties \n6. Find by cost" );
-           System.out.println("7. Find by no of rooms and city \n8. Exit");
+           System.out.println("7. Find by no of rooms and city \n8. Exit\n");
     
            int n=sc.nextInt();
          loop:  while(true) {
@@ -114,8 +117,9 @@ public class PropertyMain {
 			PropertyDAO p = new PropertyDAO();
 			List<Property> list=p.searchByCity(city);
 			if(list.size()<1) throw new SQLException();
-			System.out.println(list);			
-			
+			//System.out.println(list);			
+			list.forEach(System.out::println);
+
 			}catch (SQLException e) {
 				try {
 				throw new PropertyException("No properties to show");
@@ -129,8 +133,9 @@ public class PropertyMain {
 			PropertyDAO p = new PropertyDAO();
 			List<Property> list=p.showAllProperties();
 			if(list.size()<1) throw new SQLException();
-			System.out.println(list);			
-			
+			//System.out.println(list);			
+			list.forEach(System.out::println);
+
 			}catch (SQLException e) {
 				try {
 				throw new PropertyException("No properties to show");
@@ -148,7 +153,8 @@ public class PropertyMain {
 			PropertyDAO p = new PropertyDAO();
 			List<Property> list=p.searchByCost(low, high);
 			if(list.size()<1) throw new SQLException();
-			System.out.println(list);			
+			//System.out.println(list);		
+			list.forEach(System.out::println);
 			
 			}catch (SQLException e) {
 				try {
@@ -168,7 +174,9 @@ public class PropertyMain {
 			PropertyDAO p = new PropertyDAO();
 			List<Property> list=p.searchByNoOfRoomsAndCity(rooms,city);
 			if(list.size()<1) throw new SQLException();
-			System.out.println(list);			
+			//System.out.println(list);
+			list.forEach(System.out::println);
+
 
 		}catch (SQLException e) {
 			try {
