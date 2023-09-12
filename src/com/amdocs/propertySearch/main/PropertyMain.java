@@ -4,6 +4,8 @@ import java.util.Scanner;
 import com.amdocs.propertySearch.dao.PropertyDAO;
 import com.amdocs.propertySearch.exception.PropertyException;
 import com.amdocs.propertySearch.model.Property;
+
+import java.util.InputMismatchException;
 import java.util.List;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -55,8 +57,9 @@ public class PropertyMain {
 				System.out.println("Number of rooms cannot be nagative");
 				return;
 			}
-		} catch (IOException e2) {
-			e2.printStackTrace();
+		} catch (Exception e2) {
+			System.out.println("Error in input");
+			return;
 		}
 		
 		System.out.print("Area in square feet: ");
@@ -64,9 +67,12 @@ public class PropertyMain {
 		try{
 			area=sc.nextDouble();
 			if(area<0) throw new PropertyException(""); 
-			}catch(Exception e) { 
-				System.out.println("Please enter correct data");
-				return; }
+			}
+		catch(Exception e1) {
+			System.out.println("Please enter correct data");
+			if(sc.hasNext()) sc.next();
+			return;
+		}
 		
 		System.out.print("Floor no: ");
 		int floor=0;
@@ -75,6 +81,7 @@ public class PropertyMain {
 			if(floor<0) throw new PropertyException(""); 
 			}catch(Exception e) { 
 				System.out.println("Please enter correct data");
+				if(sc.hasNext()) sc.next();
 				return; }
 		
 		System.out.print("City name: ");
@@ -100,6 +107,7 @@ public class PropertyMain {
 			if(cost<0) throw new PropertyException("Please enter correct data"); 
 			}catch(Exception e) { 
 				System.out.println("Please enter correct data");
+				if(sc.hasNext()) sc.next();
 				return; }
 		
 		System.out.print("Owner name: ");
