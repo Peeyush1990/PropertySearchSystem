@@ -7,12 +7,12 @@ import java.util.ArrayList;
 
 public class PropertyDAO {
 	static Connection connect=DBconnection.getConnection();
-	private static final String property_ADD="insert into Properties values(?,?,?,?,?,?,?,?,?,?)";
+	private static final String property_ADD="insert into Properties values(?,?,?,?,?,?,?,?,?)";
 	private static final String property_DELETE="delete from Properties where id=?";
 	private static final String property_UPDATE="update Properties set cost=? where id=?";
 	private static final String property_SEARCH="select * from Properties";
 	private static final String property_SEARCH_CITY="select * from Properties where city=?";
-	private static final String property_SEARCH_COST="select * from Properties where price between ? and ?";
+	private static final String property_SEARCH_COST="select * from Properties where cost between ? and ?";
 	private static final String property_SEARCH_ROOMSCITY="select * from Properties where city=? and no_rooms=?";
 	
 	private final PreparedStatement addStatement;
@@ -148,7 +148,7 @@ public class PropertyDAO {
 		List<Property> list=new ArrayList<Property>();
 		searchRoomCityStatement.setString(1,city);
 		searchRoomCityStatement.setString(2,rooms);
-		ResultSet rs=searchCostStatement.executeQuery();
+		ResultSet rs=searchRoomCityStatement.executeQuery();
 		while(rs.next()) {
 			int id=rs.getInt(1);
 			String room=rs.getString(2);
