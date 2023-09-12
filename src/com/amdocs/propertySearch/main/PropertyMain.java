@@ -13,19 +13,19 @@ public class PropertyMain {
 	static Scanner sc=new Scanner(System.in);
 	static BufferedReader input = new BufferedReader (new InputStreamReader (System.in));
 	public static void main(String[] args) throws SQLException {
-           System.out.println("Welcome to Property Search System. Please select an operation you want to perform: \n1. Add new property");
-           System.out.println("2. Update property cost \n3. Delete Prperty \n4. Find by city \n5. View all properties \n6. Find by cost" );
-           System.out.println("7. Find by no of rooms and city \n8. Exit\n");
-    
-           int n=sc.nextInt();
+     
          loop:  while(true) {
+        	 System.out.println("Welcome to Property Search System. Please select an operation you want to perform: \n1. Add new property");
+             System.out.println("2. Update property cost \n3. Delete Prperty \n4. Find by city \n5. View all properties \n6. Find by cost" );
+             System.out.println("7. Find by no of rooms and city \n8. Exit\n");
+        	 int n=sc.nextInt();
            switch (n) {
            
            case 1 -> addNewProperty();
              
-           case 2 -> deleteExistingProperty();
+           case 2 -> updateExisitingProperty();
              
-           case 3 -> updateExisitingProperty();
+           case 3 -> deleteExistingProperty();
            
            case 4 -> searchCity();
            
@@ -51,13 +51,32 @@ public class PropertyMain {
 		String rooms=null;
 		try {
 			rooms = input.readLine();
+			if(Integer.parseInt(rooms)<0) {
+				System.out.println("Number of rooms cannot be nagative");
+				return;
+			}
 		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
+		
 		System.out.print("Area in square feet: ");
-		double area=sc.nextDouble();
+		double area=0;
+		try{
+			area=sc.nextDouble();
+			if(area<0) throw new PropertyException(""); 
+			}catch(Exception e) { 
+				System.out.println("Please enter correct data");
+				return; }
+		
 		System.out.print("Floor no: ");
-		int floor=sc.nextInt();
+		int floor=0;
+		try{
+			floor=sc.nextInt();
+			if(floor<0) throw new PropertyException(""); 
+			}catch(Exception e) { 
+				System.out.println("Please enter correct data");
+				return; }
+		
 		System.out.print("City name: ");
 		String city=null;
 		try {
@@ -65,6 +84,7 @@ public class PropertyMain {
 		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
+		
 		System.out.print("State name: ");
 		String state=null;
 		try {
@@ -72,8 +92,16 @@ public class PropertyMain {
 		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
+		
 		System.out.print("Cost: ");
-		double cost=sc.nextDouble();
+		double cost=0;
+		try{
+			cost=sc.nextDouble();
+			if(cost<0) throw new PropertyException("Please enter correct data"); 
+			}catch(Exception e) { 
+				System.out.println("Please enter correct data");
+				return; }
+		
 		System.out.print("Owner name: ");
 		String name=null;
 		try {
@@ -81,6 +109,7 @@ public class PropertyMain {
 		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
+		
 		System.out.print("Owner contact no: ");
 		String contact=null;
 		try {
@@ -123,11 +152,15 @@ public class PropertyMain {
 		int id=sc.nextInt();
 		System.out.print("Enter new cost of property: ");
 		double cost=sc.nextDouble();
-             
+		try{
+			if(cost<0) throw new PropertyException("Cost of property cannot be negative"); 
+			}catch(PropertyException e) { return; }
+		  
 		try {
 			PropertyDAO p = new PropertyDAO();
-			p.updateProperty(id, cost);
+			if(p.updateProperty(id, cost))
 				System.out.println("Cost of property updated");
+			else System.out.println("Id not found");
 			}catch (SQLException e) {
 				try {
 				throw new PropertyException("Cost of property not updated");
@@ -138,7 +171,7 @@ public class PropertyMain {
 	//search by city
 	static void searchCity(){
 		System.out.print("Enter name of city you want to search properties in: ");
-	    String city=null;
+		String city=null;
 		try {
 			city = input.readLine();
 		} catch (IOException e2) {
@@ -148,9 +181,9 @@ public class PropertyMain {
 			PropertyDAO p = new PropertyDAO();
 			List<Property> list=p.searchByCity(city);
 			if(list.size()<1) throw new SQLException();
-			//System.out.println(list);			
+			//System.out.println(list);
 			list.forEach(System.out::println);
-
+			
 			}catch (SQLException e) {
 				try {
 				throw new PropertyException("No properties to show");
@@ -164,9 +197,9 @@ public class PropertyMain {
 			PropertyDAO p = new PropertyDAO();
 			List<Property> list=p.showAllProperties();
 			if(list.size()<1) throw new SQLException();
-			//System.out.println(list);			
+			//System.out.println(list);	
 			list.forEach(System.out::println);
-
+			
 			}catch (SQLException e) {
 				try {
 				throw new PropertyException("No properties to show");
@@ -181,11 +214,15 @@ public class PropertyMain {
 		System.out.print("Enter highest cost: ");
 		double high=sc.nextDouble();
 		try {
+			if(low>high||high<0||low<0) throw new PropertyException("Enter correct data");
+		}catch(PropertyException e) { return; }
+		try {
 			PropertyDAO p = new PropertyDAO();
 			List<Property> list=p.searchByCost(low, high);
 			if(list.size()<1) throw new SQLException();
-			//System.out.println(list);		
+			//System.out.println(list);
 			list.forEach(System.out::println);
+
 			
 			}catch (SQLException e) {
 				try {
@@ -198,7 +235,7 @@ public class PropertyMain {
 	//search by number of rooms and city
     static void searchRoomsCity(){
     	System.out.print("Enter number of rooms: ");
-		String rooms=null;
+    	String rooms=null;
 		try {
 			rooms = input.readLine();
 		} catch (IOException e2) {
@@ -211,6 +248,7 @@ public class PropertyMain {
 		} catch (IOException e2) {
 			e2.printStackTrace();
 		}
+		
 		try {
 			PropertyDAO p = new PropertyDAO();
 			List<Property> list=p.searchByNoOfRoomsAndCity(rooms,city);
