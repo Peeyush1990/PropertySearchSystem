@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 
 public class PropertyMain {
 	static Scanner sc=new Scanner(System.in);
+	static BufferedReader input = new BufferedReader (new InputStreamReader (System.in));
 	public static void main(String[] args) throws SQLException {
            System.out.println("Welcome to Property Search System. Please select an operation you want to perform: \n1. Add new property");
            System.out.println("2. Update property cost \n3. Delete Prperty \n4. Find by city \n5. View all properties \n6. Find by cost" );
@@ -47,21 +48,46 @@ public class PropertyMain {
 	//to add
 	static void addNewProperty() {
 		System.out.print("Please enter following details. \nNo of rooms: ");
-		String rooms=sc.nextLine();
+		String rooms=null;
+		try {
+			rooms = input.readLine();
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
 		System.out.print("Area in square feet: ");
 		double area=sc.nextDouble();
 		System.out.print("Floor no: ");
 		int floor=sc.nextInt();
 		System.out.print("City name: ");
-		String city=sc.nextLine();
+		String city=null;
+		try {
+			city = input.readLine();
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
 		System.out.print("State name: ");
-		String state=sc.nextLine();
+		String state=null;
+		try {
+			state = input.readLine();
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
 		System.out.print("Cost: ");
 		double cost=sc.nextDouble();
 		System.out.print("Owner name: ");
-		String name=sc.nextLine();
+		String name=null;
+		try {
+			name = input.readLine();
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
 		System.out.print("Owner contact no: ");
-		String contact=sc.nextLine();
+		String contact=null;
+		try {
+			contact = input.readLine();
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
 		
    try {
 	Property property=new Property(rooms,area,floor,city,state,cost,name,contact);	
@@ -112,7 +138,12 @@ public class PropertyMain {
 	//search by city
 	static void searchCity(){
 		System.out.print("Enter name of city you want to search properties in: ");
-	    String city=sc.nextLine();
+	    String city=null;
+		try {
+			city = input.readLine();
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
 	    try {
 			PropertyDAO p = new PropertyDAO();
 			List<Property> list=p.searchByCity(city);
@@ -167,9 +198,19 @@ public class PropertyMain {
 	//search by number of rooms and city
     static void searchRoomsCity(){
     	System.out.print("Enter number of rooms: ");
-		String rooms =sc.nextLine();
+		String rooms=null;
+		try {
+			rooms = input.readLine();
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
 		System.out.print("Enter name of city: ");
-		String city =sc.nextLine();
+		String city=null;
+		try {
+			city = input.readLine();
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
 		try {
 			PropertyDAO p = new PropertyDAO();
 			List<Property> list=p.searchByNoOfRoomsAndCity(rooms,city);
